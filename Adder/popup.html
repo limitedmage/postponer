@@ -1,0 +1,39 @@
+<html>
+<head>
+<style>
+	body {width:307px; height:220px;}
+</style>
+
+<script>
+
+	var frame = document.createElement('iframe');
+	frame.setAttribute('width', '100%');
+	frame.setAttribute('height', '100%');
+	frame.setAttribute('frameborder', '0');
+	frame.setAttribute('scrolling', 'no');
+
+
+	chrome.windows.getCurrent(function(windows) {
+		chrome.tabs.getSelected(windows.id, function(tab) {
+		
+			var src = 'https://readitlaterlist.com/edit?' +
+			'BL=1&' +
+			'url=' + tab.url + '&' +
+			'title=' + tab.title;
+			
+			frame.setAttribute('src', src);
+			
+			document.body.appendChild(frame);
+		
+		});
+	});
+</script>
+
+
+</head>
+
+<body>
+
+	
+</body>
+</html>

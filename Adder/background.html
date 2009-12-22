@@ -1,0 +1,26 @@
+<html>
+<head>
+<script>
+
+//var rilCode = "ISRIL_H='ad1c';ISRIL_SCRIPT=document.createElement('SCRIPT');ISRIL_SCRIPT.type='text/javascript';ISRIL_SCRIPT.src='http://readitlaterlist.com/b/r.js';document.getElementsByTagName('head')[0].appendChild(ISRIL_SCRIPT);";
+
+//var rilCode = "(function(){ISRIL_H='ad1c';ISRIL_SCRIPT=document.createElement('SCRIPT');ISRIL_SCRIPT.type='text/javascript';ISRIL_SCRIPT.src='http://readitlaterlist.com/b/r.js';document.getElementsByTagName('head')[0].appendChild(ISRIL_SCRIPT)})();"
+
+function init() {
+	chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+		if (tab.url.match(/^http/i)) {
+			chrome.pageAction.show(tabId);
+		}
+	});
+/*
+	chrome.pageAction.onClicked.addListener(function(tab) {
+		chrome.tabs.executeScript(tab.id, {file:'ril.js'});
+	});*/
+}
+
+</script>
+</head>
+<body onload='init()'>
+
+</body>
+</html>
