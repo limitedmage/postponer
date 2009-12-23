@@ -2,9 +2,11 @@
 <head>
 <script>
 
-//var rilCode = "ISRIL_H='ad1c';ISRIL_SCRIPT=document.createElement('SCRIPT');ISRIL_SCRIPT.type='text/javascript';ISRIL_SCRIPT.src='http://readitlaterlist.com/b/r.js';document.getElementsByTagName('head')[0].appendChild(ISRIL_SCRIPT);";
+// development id
+// var managerId = 'ocjgdlnflggeipkaikiiihohbnmglkmb';
 
-//var rilCode = "(function(){ISRIL_H='ad1c';ISRIL_SCRIPT=document.createElement('SCRIPT');ISRIL_SCRIPT.type='text/javascript';ISRIL_SCRIPT.src='http://readitlaterlist.com/b/r.js';document.getElementsByTagName('head')[0].appendChild(ISRIL_SCRIPT)})();"
+// release id
+var managerId = 'mmfblgljgoaokhbcjnddgcnaielcpjeb';
 
 function init() {
 	chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
@@ -12,10 +14,13 @@ function init() {
 			chrome.pageAction.show(tabId);
 		}
 	});
-/*
-	chrome.pageAction.onClicked.addListener(function(tab) {
-		chrome.tabs.executeScript(tab.id, {file:'ril.js'});
-	});*/
+}
+
+function reloadBadge() {
+	console.log('sending request...');
+	chrome.extension.sendRequest(managerId, 'reload', function() {
+		console.log('request sent');
+	});
 }
 
 </script>

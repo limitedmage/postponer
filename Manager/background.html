@@ -1,0 +1,73 @@
+<html>
+<head>
+<script src="jquery.js"></script>
+<script src="ril.js"></script>
+
+<script>
+
+var pollInterval = 1000 * 60 * 5; // 5 minutes
+var scheduleTime = 1000 * 10; // 10 seconds
+var t; // timer id
+
+function setBadgeText(text) {
+	chrome.browserAction.setBadgeBackgroundColor({color:[204, 0, 0, 255]});
+	chrome.browserAction.setBadgeText({text:text});
+}
+
+function init() {
+	chrome.extension.onRequestExternal.addListener(function(request, sender, response) {
+		if (request == 'reload') {
+			console.log('recieved reload request');
+			scheduleRequest();
+		}
+	});
+
+	startRequest();
+}
+
+function scheduleRequest() {
+	console.log('scheduling request');
+	stopRequest();
+	t = window.setTimeout(startRequest, scheduleTime);
+}
+
+function startRequest() {
+	
+	if (localStorage['badge'] == 'true') {
+		console.log('using badge');
+		if (localStorage['username'] != '' && localStorage['username'] != 'undefined' &&
+		localStorage['password'] != '' && localStorage['password'] != 'undefined') {
+			console.log('getting unread');
+			ril.getNumUnread(
+				localStorage['username'], 
+				localStorage['password'], 
+				function(count) {
+					console.log(count);
+					if (count == '0') {
+						setBadgeText('');
+					}
+					else {
+						setBadgeText(count);
+					}
+				}
+			);
+		}
+		
+	}
+	else {
+		setBadgeText('');
+	}
+	
+	t = window.setTimeout(startRequest, pollInterval);
+}
+
+function stopRequest() {
+	window.clearTimeout(t);
+}
+
+
+</script>
+</head>
+<body onload='init()'>
+</body>
+</html>

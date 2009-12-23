@@ -1,17 +1,24 @@
 {
 	"name": "Postponer Manager",
 	
-	"version": "0.1",
+	"version": "0.2",
 	
 	"description": "Read and manage your Read It Later reading list",
 	
 	"browser_action": {
 		"default_icon": "icon19.png",
-		"popup": "popup.html"
+		"popup": "popup.html",
+		"default_title": "Reading List"
 	},
 	
 	"icons": {
 		"48": "icon48.png",
 		"128": "icon128.png"
-	}
+	},
+	
+	"options_page": "options.html",
+	
+	"background_page": "background.html",
+	
+	"permissions": ["https://readitlaterlist.com/"]
 }

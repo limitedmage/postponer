@@ -2,7 +2,7 @@ var apikey = '6a1gGdT4p0Z4cD573dTf3aMk3aA0l54b';
 
 var ril = {
 
-	authenticate: function(username, password, successCallback, failCallback) {
+	authenticate: function(username, password, callback) {
 		var reqUrl = 'https://readitlaterlist.com/v2/auth';
 		
 		var params = {
@@ -11,17 +11,18 @@ var ril = {
 			apikey: apikey,
 			ms: new Date().getTime()
 		};
-		
-		$.getJSON(
-			reqUrl,
-			params,
-			function(data) {
-				successCallback();
+
+		$.ajax({
+			url: reqUrl,
+			data: params,
+			complete: function(xhr, status) {
+				console.log(status);
+				callback(status);
 			}
-		);
+		});
 	},
 	
-	register: function(username, password, successCallback, failCallback) {
+	register: function(username, password, callback) {
 		var reqUrl = 'https://readitlaterlist.com/v2/signup';
 	
 		var params = {
@@ -35,12 +36,12 @@ var ril = {
 			reqUrl,
 			params,
 			function(data) {
-				successCallback();
+				callback();
 			}
 		);
 	},
 	
-	getNumUnread: function(username, password, successCallback, failCallback) {
+	getNumUnread: function(username, password, callback) {
 		var reqUrl = 'https://readitlaterlist.com/v2/stats';
 		
 		var params = {
@@ -54,12 +55,12 @@ var ril = {
 			reqUrl,
 			params,
 			function(data) {
-				successCallback(data.count_unread);
+				callback(data.count_unread);
 			}
 		);
 	},
 	
-	add: function(username, password, url, title, successCallback, failCallback) {
+	add: function(username, password, url, title, callback) {
 		var reqUrl = 'https://readitlaterlist.com/v2/add';
 		
 		var params = {
@@ -75,12 +76,12 @@ var ril = {
 			reqUrl,
 			params,
 			function(data) {
-				successCallback();
+				callback();
 			}
 		);
 	},
 	
-	markRead: function(username, password, url, successCallback, failCallback) {
+	markRead: function(username, password, url, callback) {
 		var reqUrl = 'https://readitlaterlist.com/v2/send';
 		
 		var params = {
@@ -95,7 +96,7 @@ var ril = {
 			reqUrl,
 			params,
 			function(data) {
-				successCallback();
+				callback();
 			}
 		);
 	}

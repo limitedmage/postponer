@@ -1,0 +1,161 @@
+<html>
+<head>
+<title>Postponer Manager Options</title>
+
+<style>
+#content { width: 500px; border: #C90000 solid 10px; border-radius: 10px; background: white; margin-left:auto; margin-right:auto; padding: 10px;}
+body {font-family:sans-serif; background: #DDD;}
+#logo {float:right; background-image:url(icon128.png); width:128px; height:128px;}
+#load {display:block; text-align: center;}
+</style>
+
+<script src='jquery.js'></script>
+<script src='ril.js'></script>
+
+<script>
+// default options
+var def_badge = false;
+var def_username = '';
+var def_password = '';
+
+// current options
+var badge;
+var username;
+var password;
+
+/**
+ * Erases all options stored in local storage
+ */
+function eraseOptions() {	
+	localStorage.removeItem('badge');
+	localStorage.removeItem('username');
+	localStorage.removeItem('password');
+}
+
+/**
+ * Loads options stored in local storage, or loads default ones if
+ * stored options do not exist or are not valid
+ */
+function loadOptions() {	
+	badge = localStorage['badge'] == 'true' ? true : false;
+	$('#badge')[0].checked = badge;
+	
+	username = localStorage['username'];
+	if (username == 'undefined') {
+		username = def_username;
+	}
+	$('#username').val(username);
+	
+	password = localStorage['password'];
+	if (password == 'undefined') {
+		password = def_password;
+	}
+	$('#password').val(password);
+}
+
+/**
+ * Saves current options to local storage
+ */
+function saveOptions() {
+	localStorage['badge'] = String(badge);
+	localStorage['username'] = username;
+	localStorage['password'] = password;
+	
+	var bg = chrome.extension.getBackgroundPage();
+	bg.stopRequest();
+	bg.startRequest();
+}
+
+$(document).ready(function() {
+	loadOptions();
+	
+	if ($('#badge')[0].checked) $('#badge-options').show();
+	else $('#badge-options').hide();	
+	
+	$('#badge').live('change', function() {
+		if ($(this)[0].checked) $('#badge-options').show('slow');
+		else $('#badge-options').hide('slow');
+		badge = $(this)[0].checked;
+		saveOptions();
+	});
+	
+	$('#username').live('change', function() {
+		username = $(this).val();
+		saveOptions();
+	});
+	
+	$('#password').live('change', function() {
+		password = $(this).val();
+		saveOptions();
+	});
+	
+	$('#check').live('click', function() {
+		$('#message').text('Checking...');
+		ril.authenticate(username, password, function(data) {
+			if (data == 'success') {
+				$('#message').text('Correct');
+			}
+			else {
+				$('#message').text('Incorrect username or password, try again');
+			}
+		});
+	});
+	
+	$('#erase').live('click', function() { eraseOptions(); location.reload();});
+});
+
+</script>
+</head>
+
+<body>
+
+<div id='content'>
+	<span id='logo'></span>
+	<h1>Postponer Manager options</h1>
+	
+	<p>Options are saved automatically.</p>
+	
+	<h3>Icon badge</h3>
+	<p>
+		<input type='checkbox' name='badge' id='badge' /><label for='badge'>Show unread count in icon badge (requires authentication)</label>
+	</p>
+	<div id='badge-options'>
+		<p>Badge is updated once every five minutes.</p>
+		<table>
+			<tr>
+				<td><label for='username'>Username</label></td>
+				<td><input type='text' name='username' id='username' /></td>
+			</tr>
+			<tr>
+				<td><label for='password'>Password</label></td>
+				<td><input type='password' name='password' id='password' /></td>
+			</tr>
+		</table>
+		<p><button id='check'>Check</button> <span id='message'></span>
+		
+	</div>
+	
+	<h3>Erase Options</h3>
+	<p>
+		<button id='erase'>Erase all options</button><br />
+	</p>
+	
+	<hr />
+	
+	<div id='credits'>
+	<h3>Credits and License</h3>
+	<p>
+		<strong>Author</strong><br /> 
+		Juliana Pe&ntilde;a <br />
+		<a href='http://julianapena.com'>http://julianapena.com</a><br />
+		<a href='http://twitter.com/limitedmage'>@limitedmage</a>
+	</p>
+	<p>
+		<strong>Code</strong><br />
+		This extension is open source under the <a href='http://creativecommons.org/licenses/GPL/2.0/'>GPLv2</a>. More info at <a href='http://code.google.com/p/chromepostponer/'>Postponer's Google Code page</a>.
+	</p>
+	</div>
+</div>
+
+</body>
+</html>
