@@ -1,0 +1,158 @@
+<html>
+<head>
+<title>Postponer Adder Options</title>
+
+<style>
+#content { width: 500px; border: #C90000 solid 10px; border-radius: 10px; background: white; margin-left:auto; margin-right:auto; padding: 10px;}
+body {font-family:sans-serif; background: #DDD;}
+#logo {float:right; background-image:url(icon128.png); width:128px; height:128px;}
+#load {display:block; text-align: center;}
+</style>
+
+<script src='jquery.js'></script>
+
+<script>
+// default options
+var def_badge = false;
+var def_username = '';
+var def_password = '';
+
+// current options
+var greader;
+var greaderLocation;
+var greaderList;
+var greaderExpanded;
+
+/**
+ * Erases all options stored in local storage
+ */
+function eraseOptions() {	
+	localStorage.removeItem('greader');
+	localStorage.removeItem('greaderLocation');
+	localStorage.removeItem('greaderList');
+	localStorage.removeItem('greaderExpanded');
+}
+
+/**
+ * Loads options stored in local storage, or loads default ones if
+ * stored options do not exist or are not valid
+ */
+function loadOptions() {	
+	greader = localStorage['greader'] == 'false' ? false : true;
+	$('#greader')[0].checked = greader;
+	
+	greaderLocation = localStorage['greaderLocation'];
+	if (greaderLocation != 'before' && greaderLocation != 'after') {
+		greaderLocation = 'before';
+	}
+	
+	if (greaderLocation == 'before') {
+		$('#greaderLocationBefore')[0].checked = true;
+	}
+	else if (greaderLocation == 'after') {
+		$('#greaderLocationAfter')[0].checked = true;
+	}
+	
+	greaderList = localStorage['greaderList'] == 'false' ? false : true;
+	$('#greaderList')[0].checked = greaderList;
+	
+	greaderExpanded = localStorage['greaderExpanded'] == 'false' ? false : true;
+	$('#greaderExpanded')[0].checked = greaderExpanded;
+}
+
+/**
+ * Saves current options to local storage
+ */
+function saveOptions() {
+	localStorage['greader'] = String(greader);
+	localStorage['greaderLocation'] = greaderLocation;
+	localStorage['greaderList'] = String(greaderList);
+	localStorage['greaderExpanded'] = String(greaderExpanded);
+}
+
+$(document).ready(function() {
+	loadOptions();
+	
+	if ($('#greader')[0].checked) $('#greader-options').show();
+	else $('#greader-options').hide();	
+	
+	$('#greader').live('change', function() {
+		if ($(this)[0].checked) $('#greader-options').show('slow');
+		else $('#greader-options').hide('slow');
+		greader = $(this)[0].checked;
+		saveOptions();
+	});
+	
+	$('[name=greaderLocation]').live('change', function() {
+		if ($(this)[0].checked) greaderLocation = $(this).val();
+		saveOptions();
+	});
+	
+	$('#greaderList').live('change', function() {
+		greaderList = $(this)[0].checked;
+		saveOptions();
+	});
+	$('#greaderExpanded').live('change', function() {
+		greaderExpanded = $(this)[0].checked;
+		saveOptions();
+	});
+	
+	$('#erase').live('click', function() { eraseOptions(); location.reload();});
+});
+
+</script>
+</head>
+
+<body>
+
+<div id='content'>
+	<span id='logo'></span>
+	<h1>Postponer Adder options</h1>
+	
+	<p>Options are saved automatically.</p>
+	
+	<h3>Google Reader Integration</h3>
+	<p>
+		<input type='checkbox' name='greader' id='greader' /><label for='badge'>Show Postponer icon in Google Reader</label>
+	</p>
+	<div id='greader-options'>
+		<p>
+			<input type='radio' value='before' name='greaderLocation' id='greaderLocationBefore' />
+			<label for='before'>Show icon before title</label>
+			<br />
+			<input type='radio' value='after' name='greaderLocation' id='greaderLocationAfter' />
+			<label for='after'>Show icon after title</label>
+		</p>
+		<p>
+			<input type='checkbox' name='greaderList' id='greaderList' />
+			<label for='greaderList'>Show icon in list view</label>
+			<br />
+			<input type='checkbox' name='greaderExpanded' id='greaderExpanded' />
+			<label for='greaderExpanded'>Show icon in expanded view</label>
+		</p>	
+	</div>
+	
+	<h3>Erase Options</h3>
+	<p>
+		<button id='erase'>Erase all options</button><br />
+	</p>
+	
+	<hr />
+	
+	<div id='credits'>
+	<h3>Credits and License</h3>
+	<p>
+		<strong>Author</strong><br /> 
+		Juliana Pe&ntilde;a <br />
+		<a href='http://julianapena.com'>http://julianapena.com</a><br />
+		<a href='http://twitter.com/limitedmage'>@limitedmage</a>
+	</p>
+	<p>
+		<strong>Code</strong><br />
+		This extension is open source under the <a href='http://creativecommons.org/licenses/GPL/2.0/'>GPLv2</a>. More info at <a href='http://code.google.com/p/chromepostponer/'>Postponer's Google Code page</a>.
+	</p>
+	</div>
+</div>
+
+</body>
+</html>

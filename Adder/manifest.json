@@ -1,7 +1,7 @@
 {
 	"name": "Postponer Adder",
 	
-	"version": "0.2",
+	"version": "0.3",
 	
 	"description": "Add items to your Read It Later reading list",
 	
@@ -19,8 +19,17 @@
 	
 	"background_page": "background.html",
 	
+	"options_page": "options.html",
+	
 	"icons": {
 		"48": "icon48.png",
 		"128": "icon128.png"
-	}
+	},
+	
+	"content_scripts": [ {
+      "exclude_globs": [  ],
+      "include_globs": [ "http://www.google.*/reader/*", "https://www.google.*/reader/*" ],
+      "js": [ "greader.js" ],
+      "matches": [ "http://*/*", "https://*/*" ]
+   } ]
 }

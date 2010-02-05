@@ -5,8 +5,8 @@
 
 <script>
 
-var pollInterval = 1000 * 60 * 5; // 5 minutes
-var scheduleTime = 1000 * 10; // 10 seconds
+//var pollInterval = 1000 * 60 * 5; // 5 minutes
+var scheduleTime = 1000 * 20; // 20 seconds
 var t; // timer id
 
 function setBadgeText(text) {
@@ -58,7 +58,7 @@ function startRequest() {
 		setBadgeText('');
 	}
 	
-	t = window.setTimeout(startRequest, pollInterval);
+	//t = window.setTimeout(startRequest, pollInterval);
 }
 
 function stopRequest() {
