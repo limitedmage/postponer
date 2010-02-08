@@ -30,7 +30,6 @@
 					url=\""+href+"\";\
 					cp=\"https://readitlaterlist.com/edit?BL=1&title=\"+name+\"&url=\"+url;\
 					w=window.open(cp,\"_blank\",\"status=no,toolbar=no,width=320,height=220,resizable=yes\");\
-					setTimeout(function(){w.focus();},500);\
 				})();");
 			a.addEventListener('click', function() {
 				chrome.extension.sendRequest('reload');

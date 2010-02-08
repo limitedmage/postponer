@@ -10,7 +10,11 @@ The extensions were designed to be used together, but can also be used on their 
 
 Changelog
 
-Version 0.3 - 4 Feb 09
+Version 0.3.1 - 8 Feb 10
+Adder-only update
+ * Fixed keyboard shortcut issue after clicking icon in Google Reader
+
+Version 0.3 - 4 Feb 10
 Manager
  * Now badge only reloads when Chrome is opened and when the icon is clicked. Previous version was running out of API calls within seconds and overloading the RIL server. Sorry! Just remember to click the icon to reload.
 Adder
