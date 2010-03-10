@@ -17,7 +17,7 @@ var ril = {
 			data: params,
 			complete: function(xhr, status) {
 				console.log(status);
-				callback(status);
+				callback(xhr.status);
 			}
 		});
 	},
@@ -72,13 +72,13 @@ var ril = {
 			ms: new Date().getTime()
 		};
 		
-		$.getJSON(
-			reqUrl,
-			params,
-			function(data) {
-				callback();
+		$.ajax({
+			url: reqUrl,
+			data: params,
+			complete: function(xhr, status) {
+				callback(xhr.status);
 			}
-		);
+		});
 	},
 	
 	markRead: function(username, password, url, callback) {
@@ -92,13 +92,12 @@ var ril = {
 			ms: new Date().getTime()
 		};
 		
-		$.getJSON(
-			reqUrl,
-			params,
-			function(data) {
-				callback();
+		$.ajax({
+			url: reqUrl,
+			data: params,
+			complete: function(xhr, status) {
+				callback(xhr.status);
 			}
-		);
+		});
 	}
-	
 }

@@ -1,42 +1,75 @@
 <html>
 <head>
 <style>
-	body {width:307px; height:220px;}
+	body {text-align:center; color:black; font-family:sans-serif;}
 </style>
 
 <script src='jquery.js'></script>
+<script src='ril.js'></script>
 <script>
 
 	$(document).ready(function() {
-		var frame = document.createElement('iframe');
-		frame.setAttribute('width', '100%');
-		frame.setAttribute('height', '100%');
-		frame.setAttribute('frameborder', '0');
-		frame.setAttribute('scrolling', 'no');
-
-
-		chrome.windows.getCurrent(function(windows) {
-			chrome.tabs.getSelected(windows.id, function(tab) {
+		if (localStorage["oneclick"] == 'true') {
+		
+			var username = localStorage["username"];
+			var password = localStorage["password"];
 			
-				var src = 'https://readitlaterlist.com/edit?' +
-				'BL=1&' +
-				'url=' + tab.url + '&' +
-				'title=' + tab.title;
-				
-				frame.setAttribute('src', src);
-				
-				document.body.appendChild(frame);
-			
+			chrome.windows.getCurrent(function(windows) {
+				chrome.tabs.getSelected(windows.id, function(tab) {
+					var title = tab.title;
+					var url = tab.url;
+					
+					
+					$("body").text("Saving...");
+					
+					ril.add(username, password, url, title, function(status) {
+						if (status == 200) { // success
+							$("body").text("Saved!");
+							window.setTimeout(function(){window.close()}, 500); // close window after 0.5 secs
+						}
+						else if (status == 401) {
+							$("body").text("Incorrect username or password, go to options page to correct this.");
+						}
+						else if (status == 403) {
+							$("body").text("API limit exceeded, try again later.");
+						}
+						else {
+							$("body").text("Unexpected error: " + status);
+						}
+					});
+				});
 			});
-		});
+		}
+		else {
+			$("body").width("307").height("220");
+		
+			var frame = document.createElement('iframe');
+			frame.setAttribute('width', '100%');
+			frame.setAttribute('height', '100%');
+			frame.setAttribute('frameborder', '0');
+			frame.setAttribute('scrolling', 'no');
+
+
+			chrome.windows.getCurrent(function(windows) {
+				chrome.tabs.getSelected(windows.id, function(tab) {
+				
+					var src = 'https://readitlaterlist.com/edit?' +
+					'BL=1&' +
+					'url=' + tab.url + '&' +
+					'title=' + tab.title;
+					
+					frame.setAttribute('src', src);
+					
+					document.body.appendChild(frame);
+				
+				});
+			});
+		}
 		
 		var bg = chrome.extension.getBackgroundPage();
-		bg.reloadBadge();
-		
+		bg.reloadBadge();		
 	});
 </script>
-
-
 </head>
 
 <body>

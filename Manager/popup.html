@@ -7,22 +7,21 @@
 
 	#title {float: left; margin-bottom:5px;}
 	#options {float: right;}
-	#options a {text-decoration: none;}
-	#options a:hover {text-decoration: underline;}
 	
 	.clear {clear: both;}
 </style>
 <script src='jquery.js'></script>
 <script>
 	$(document).ready(function() {
-		var options = document.createElement('a');
-		options.innerHTML = 'Options';
-		options.setAttribute('href', chrome.extension.getURL('options.html'));
-		options.setAttribute('target', '_blank');
-		$('#options').append(options);
-		
 		var bg = chrome.extension.getBackgroundPage();
 		bg.scheduleRequest();
+		
+		var width = parseInt(localStorage['width']);
+		var height = parseInt(localStorage['height']);
+		
+		if (!(isNaN(width) || isNaN(height))) {
+			$('body').width(width).height(height);
+		}
 	});
 </script>
 
@@ -30,7 +29,11 @@
 <body>
 
 <div id='title'><strong>Postponer</strong></div>
-<div id='options'></div>
+<div id='options'>
+	<a href="options.html" target="_blank" title="Options"><img src="img/options.png" alt="Options" /></a> 
+	<a href="javascript:try {window.open('http://readitlaterlist.com/unread?bl=1','rillist','scrollbars=1,toolbar=0,status=1,width=380,height=400');}catch(e) { }void(0);" title="Open in external window"><img src="img/external.png" alt="Open in external window" /></a>
+	<a href="http://readitlaterlist.com/d" title="Open RIL Digest" target="_blank"><img src="img/pan.png" alt="Open RIL Digest" /></a>
+</div>
 
 <iframe src="http://readitlaterlist.com/unread" width="100%" height="100%" frameborder="0">
 </iframe>

@@ -24,6 +24,7 @@
 			//make linking string
 			//make anker tags
 			var a = document.createElement("a");
+			/*
 			a.setAttribute('href', "javascript:(\
 				function(){\
 					name=encodeURIComponent(\""+titleStr+"\");\
@@ -31,6 +32,11 @@
 					cp=\"https://readitlaterlist.com/edit?BL=1&title=\"+name+\"&url=\"+url;\
 					w=window.open(cp,\"_blank\",\"status=no,toolbar=no,width=320,height=220,resizable=yes\");\
 				})();");
+			*/
+			var name = encodeURIComponent(titleStr);
+			var cp = "https:\/\/readitlaterlist.com/edit?BL=1&title=" + name + "&url=" + href;
+			//var w = window.open(cp, "_blank", "status=no,toolbar=no,width=320,height=220,resizable=yes");
+			a.setAttribute('href', 'javascript:(function(){window.open("'+cp+'", "_blank", "status=no,toolbar=no,width=320,height=220,resizable=yes");})()');
 			a.addEventListener('click', function() {
 				chrome.extension.sendRequest('reload');
 			}, false);

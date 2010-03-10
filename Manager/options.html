@@ -17,11 +17,15 @@ body {font-family:sans-serif; background: #DDD;}
 var def_badge = false;
 var def_username = '';
 var def_password = '';
+var def_width = 350;
+var def_height = 400;
 
 // current options
 var badge;
 var username;
 var password;
+var width;
+var height;
 
 /**
  * Erases all options stored in local storage
@@ -30,6 +34,8 @@ function eraseOptions() {
 	localStorage.removeItem('badge');
 	localStorage.removeItem('username');
 	localStorage.removeItem('password');
+	localStorage.removeItem('width');
+	localStorage.removeItem('height');
 }
 
 /**
@@ -51,6 +57,18 @@ function loadOptions() {
 		password = def_password;
 	}
 	$('#password').val(password);
+	
+	width = parseInt(localStorage['width']);
+	if (width == 'undefined' || isNaN(width)) {
+		width = def_width;
+	}
+	$('#width').val(width);
+	
+	height = parseInt(localStorage['height']);
+	if (height == 'undefined' || isNaN(height)) {
+		height = def_height;
+	}
+	$('#height').val(height);
 }
 
 /**
@@ -60,10 +78,24 @@ function saveOptions() {
 	localStorage['badge'] = String(badge);
 	localStorage['username'] = username;
 	localStorage['password'] = password;
+	localStorage['width'] = width;
+	localStorage['height'] = height;
 	
 	var bg = chrome.extension.getBackgroundPage();
 	bg.stopRequest();
 	bg.startRequest();
+}
+
+/**
+ * Checks if a number is being entered
+ */
+function isNumberKey(evt) {
+	var charCode = (evt.which) ? evt.which : event.keyCode
+	
+	if (charCode > 31 && (charCode < 48 || charCode > 57))
+		return false;
+
+	return true;
 }
 
 $(document).ready(function() {
@@ -89,19 +121,46 @@ $(document).ready(function() {
 		saveOptions();
 	});
 	
+	$('#width').live('change', function() {
+		width = parseInt($(this).val());
+		if (isNaN(width)) {
+			width = def_width;
+			$(this).val(def_width)
+		}
+		saveOptions();
+	});
+	
+	$('#height').live('change', function() {
+		height = parseInt($(this).val());
+		if (isNaN(height)) {
+			height = def_height;
+			$(this).val(def_height)
+		}
+		saveOptions();
+	});
+	
 	$('#check').live('click', function() {
 		$('#message').text('Checking...');
-		ril.authenticate(username, password, function(data) {
-			if (data == 'success') {
+		ril.authenticate(username, password, function(status) {
+			if (status == 200) {
 				$('#message').text('Correct');
 			}
+			else if (status == 401) {
+				$('#message').text('Incorrect username or password, try again.');
+			}
+			else if (status == 403) {
+				$('#message').text('API limit exceeded, try again later.');
+			}
 			else {
-				$('#message').text('Incorrect username or password, try again');
+				$('#message').text('Unexpected error: ' + status);
 			}
 		});
 	});
 	
-	$('#erase').live('click', function() { eraseOptions(); location.reload();});
+	$('#erase').live('click', function() { 
+		eraseOptions(); 
+		location.reload();
+	});
 });
 
 </script>
@@ -135,6 +194,18 @@ $(document).ready(function() {
 		
 	</div>
 	
+	<h3>Popup size</h3>
+	<table>
+		<tr>
+			<td><label for='width'>Width</label></td>
+			<td><input type='text' name='width' id='width' onkeypress='return isNumberKey(event)' /></td>
+		</tr>
+		<tr>
+			<td><label for='height'>Height</label></td>
+			<td><input type='text' name='height' id='height' onkeypress='return isNumberKey(event)' /></td>
+		</tr>
+	</table>
+	
 	<h3>Erase Options</h3>
 	<p>
 		<button id='erase'>Erase all options</button><br />
@@ -148,7 +219,8 @@ $(document).ready(function() {
 		<strong>Author</strong><br /> 
 		Juliana Pe&ntilde;a <br />
 		<a href='http://julianapena.com'>http://julianapena.com</a><br />
-		<a href='http://twitter.com/limitedmage'>@limitedmage</a>
+		<a href='http://twitter.com/limitedmage'>@limitedmage</a><br />
+		If you like this extension, please <a href="http://julianapena.com/donate.html?ref=Postponer%20Manager">buy me a cup of coffee</a>.
 	</p>
 	<p>
 		<strong>Code</strong><br />
