@@ -50,4 +50,4 @@ If you like this extension, please buy me a cup of coffee: http://julianapena.co
 
 Code open source under the GPL 2.0 and is available at http://code.google.com/p/chromepostponer/
 
-If you want to file a bug or request a new feature, please report at http://code.google.com/p/chromepostponer/issues/entry
+If you want to file a bug or request a new feature, please report it at http://code.google.com/p/chromepostponer/issues/entry

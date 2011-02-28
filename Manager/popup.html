@@ -2,7 +2,7 @@
 <html>
 <head>
 <style>
-	body {height:400px; width:350px; font-family:sans-serif; font-size:.8em; color:black;}
+	body {height:400px; width:350px; font-family:sans-serif; font-size:.8em; color:black; overflow:hidden; }
 	a {color: black;}
 
 	#title {float: left; margin-bottom:5px;}
@@ -22,6 +22,7 @@
 		if (!(isNaN(width) || isNaN(height))) {
 			$('body').width(width).height(height);
 		}
+
 	});
 </script>
 
@@ -35,7 +36,6 @@
 	<a href="http://readitlaterlist.com/d" title="Open RIL Digest" target="_blank"><img src="img/pan.png" alt="Open RIL Digest" /></a>
 </div>
 
-<iframe src="http://readitlaterlist.com/unread" width="100%" height="100%" frameborder="0">
-</iframe>
+<iframe src="http://readitlaterlist.com/unread" style="height:100%; width:100%; float:left" frameborder="0">gt</iframe>
 </body>	
 </html>
